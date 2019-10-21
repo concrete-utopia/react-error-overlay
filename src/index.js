@@ -114,6 +114,9 @@ export function stopReportingRuntimeErrors() {
     throw new Error('Not currently listening');
   }
   currentRuntimeErrorOptions = null;
+  // We want stopReportingRuntimeErrors to act as a reset so I added these two lines
+  isIframeReady = false;
+  currentRuntimeErrorRecords = []
   try {
     stopListeningToRuntimeErrors();
   } finally {
@@ -185,9 +188,10 @@ window.__REACT_ERROR_OVERLAY_GLOBAL_HOOK__.iframeReady = function iframeReady() 
   updateIframeContent();
 };
 
-if (process.env.NODE_ENV === 'production') {
-  console.warn(
-    'react-error-overlay is not meant for use in production. You should ' +
-      'ensure it is not included in your build to reduce bundle size.'
-  );
-}
+// For Utopia, we want to run this in production mode, since we are an editor
+// if (process.env.NODE_ENV === 'production') {
+//   console.warn(
+//     'react-error-overlay is not meant for use in production. You should ' +
+//       'ensure it is not included in your build to reduce bundle size.'
+//   );
+// }

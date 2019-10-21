@@ -34,7 +34,9 @@ function getStackFrames(
         .map(f => f._originalFileName)
         .filter(f => f != null && f.indexOf('node_modules') === -1).length === 0
     ) {
-      return null;
+      // utopia: a lot of times we have stack traces entirely consisting of node_modules, so this filter here is bad for us
+      // It needs more testing to see if in production mode we have the same situation
+      // return null;
     }
     return enhancedFrames.filter(
       ({ functionName }) =>
